@@ -8,7 +8,7 @@ color:green
 title:First Alura Challenge
 image:/post02.webp
 description:Sobre el challenge de Alura
-createdAt:December 27th, 2022
+createdAt:27-12-2022
 readTime:15 min read
 author:Antonio Jaramillo Jaramillo
 ---

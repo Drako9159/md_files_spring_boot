@@ -8,7 +8,7 @@ color:pink
 title:Convertidor Challenge
 image:/post05.webp
 description:About chanllenge by ALura
-createdAt:Marzo 3th, 2023
+createdAt:03-03-2023
 readTime:15 min lectura
 author:Antonio Jaramillo Jaramillo
 ---

@@ -8,7 +8,7 @@ color:yellow
 title:Bootcamp Oracle Next Education
 image:/post01.webp
 description:Sobre el challenge de Alura
-createdAt:Diciembre 27th, 2022
+createdAt:27-12-2022
 readTime:5 min lectura
 author:Antonio Jaramillo Jaramillo
 ---

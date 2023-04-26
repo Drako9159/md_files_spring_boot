@@ -8,7 +8,7 @@ color:orange
 title:Google UX Case Study
 image:/post03.webp
 description:About Google UX
-createdAt:January 14th, 2023
+createdAt:14-01-2023
 readTime:15 min read
 author:Antonio Jaramillo Jaramillo
 ---

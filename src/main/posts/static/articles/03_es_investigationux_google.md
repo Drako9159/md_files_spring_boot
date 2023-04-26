@@ -8,7 +8,7 @@ color:purple
 title:Investigación UX Google
 image:/post04.webp
 description:Acerca de Google UX
-createdAt:Enero 14th, 2023
+createdAt:14-01-2023
 readTime:5 min lectura
 author:Antonio Jaramillo Jaramillo
 ---

@@ -8,7 +8,7 @@ color:purple
 title:Google UX Research
 image:/post04.webp
 description:About Google UX
-createdAt:January 14th, 2023
+createdAt:14-01-2023
 readTime:5 min read
 author:Antonio Jaramillo Jaramillo
 ---

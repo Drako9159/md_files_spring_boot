@@ -8,7 +8,7 @@ color:orange
 title:Sobre la inteligecia artificial
 image:/post06.webp
 description:About artificial intelligence
-createdAt:Abril 12th, 2023
+createdAt:12-04-2023
 readTime:25 min lectura
 author:Antonio Jaramillo Jaramillo
 ---
