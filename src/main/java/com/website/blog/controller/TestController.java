@@ -1,13 +1,14 @@
 package com.website.blog.controller;
 
 import com.website.blog.utils.MdFileReader;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,8 @@ public class TestController {
     @GetMapping
     public ResponseEntity test() throws IOException {
         Set<String> checks = listFile("src/main/posts");
-        List<String> filenames = new ArrayList<>(checks);/*
+        List<String> filenames = new ArrayList<>(checks);
+        /*
         try (
                 InputStream in = getResourceAsStream("/posts/");
                 BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
@@ -39,7 +41,6 @@ public class TestController {
             }
             System.out.println(filenames);
         }*/
-
         return ResponseEntity.ok(filenames);
     }
 

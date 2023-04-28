@@ -4,31 +4,30 @@ import com.website.blog.models.DataListArticles;
 import com.website.blog.utils.MdFileReader;
 import com.website.blog.utils.MdToHtmlRenderer;
 import com.website.blog.utils.SorterElements;
-import lombok.Data;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.*;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.Query;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/articles")
 public class ArticlesController {
 
     @GetMapping
-    public ResponseEntity<Page<DataListArticles>> listArticles(Pageable pageable) {
+    public ResponseEntity<Page<DataListArticles>> listArticles(Pageable pageable) throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         MdFileReader mdFileReader = new MdFileReader();
         List<DataListArticles> articlesList = new ArrayList<>();
+
+
         mdFileReader.reader("src/main/posts/static/articles").forEach(e -> {
             List<String> header = mdFileReader.readLinesFromMdFile(e);
             Date date;
@@ -45,57 +44,31 @@ public class ArticlesController {
                     header.get(11).split(":")[1], header.get(12).split(":")[1],
                     date));
         });
-        //Page<DataListArticles> page = new PageImpl<>(articlesList);
-        //Page<DataListArticles> pages = new PageImpl<>(articlesList);
-        //PagedListHolder page2 = new PagedListHolder(articlesList)
-        // ;
-        List<DataListArticles> articlesQuery = new ArrayList<>();
-
-
-        int pageSize = pageable.getPageSize();
-        long pageOffset = pageable.getOffset();
-        Sort shortQuery = pageable.getSort();
-        int totalPages = articlesList.size() / pageSize;
-
-        //PageRequest pageable2 = new PageRequest(pageable.getPageNumber(), pageSize);
-        //int max = pageable.getPageNumber() > totalPages ? articlesList.size() : pageSize * (pageable.getPageNumber() + 1);
-        //int min = pageable.getPageNumber() > totalPages ? max : pageSize * pageable.getPageNumber();
-
-        // SORT BY ID ASC
-        /*
-        Collections.sort(articlesList, new Comparator<DataListArticles>() {
-            @Override
-            public int compare(DataListArticles o1, DataListArticles o2) {
-                return o1.id().compareTo(o2.id());
-            }
-        });*/
-        // SORT BY ID ASC
-        //Collections.sort(articlesList, Comparator.comparing(DataListArticles::id));
-        // SORT BY ID DSC
-        //Collections.sort(articlesList, (e1, e2) -> e2.id().compareTo(e1.id()));
-        // DEFAULT SORT BY ID ASC
-        Collections.sort(articlesList, (e1, e2) -> e1.id().compareTo(e2.id()));
-        //Pageable paging = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 
         SorterElements sorterElements = new SorterElements();
+        articlesList.sort((e1, e2) -> e1.id().compareTo(e2.id()));
 
-        String[] strShortAvailable = {"id", "category", "tag", "filename", "language", "color", "title", "date", "readTime", "author"};
+        String[] strShortAvailable = {"id", "category", "tag", "filename", "language", "title", "date", "readTime", "author"};
         List<String> mylist = Arrays.asList(strShortAvailable);
         if (!pageable.getSort().toString().equals("UNSORTED")) {
             if (mylist.contains(pageable.getSort().toString().split(":")[0])) {
-                System.out.println(pageable.getSort().get());
                 sorterElements.sortBy(
                         articlesList,
-                        pageable.getSort().toString().split(":")[0]
-                        );
+                        pageable.getSort().toString().split(":")[0],
+                        pageable.getSort().toString().split(":")[1]
+                );
             }
         }
+        int pagesize = pageable.getPageSize() ; // page size default 20
+        long pageOffset = pageable.getOffset();
+        long total = pageOffset + articlesList.size() + (articlesList.size() == pagesize ? pagesize : 0);
 
-        //?page=1&size=20&sort=id,asc
-        long total = pageOffset + articlesList.size() + (articlesList.size() == pageSize ? pageSize : 0);
-        //articlesQuery = articlesList.subList(0, articlesList.size());
-        Page<DataListArticles> page = new PageImpl<>(articlesList, pageable, total);
+        int totalPages = articlesList.size() / pagesize;
+        int pageNos = pageable.getPageNumber();
+        int max = pageNos >= totalPages ? articlesList.size() : pagesize * (pageNos + 1);
+        int min = pageNos > totalPages ? max:pagesize * pageNos;
 
+        Page<DataListArticles> page = new PageImpl<>(articlesList.subList(min, max), pageable, total);
         return ResponseEntity.ok(page);
     }
 
@@ -114,10 +87,14 @@ public class ArticlesController {
         }
     }
 
-    public String getElementById(String id) {
+    public String getElementById(String id) throws IOException {
         MdFileReader mdFileReader = new MdFileReader();
         List<String> listElements = new ArrayList<>();
         Set<String> mdFiles = mdFileReader.reader("src/main/posts/static/articles");
+        System.out.println(mdFiles);
+        InputStream inputStream = new ClassPathResource("/posts/static/articles/")
+                .getInputStream();
+        System.out.println(inputStream);
         AtomicReference<String> result = new AtomicReference<>("");
         mdFiles.forEach((e) -> {
             Pattern pattern = Pattern.compile("(\\d+_)");

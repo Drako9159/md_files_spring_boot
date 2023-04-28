@@ -1,8 +1,6 @@
 package com.website.blog.utils;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,6 +15,7 @@ public class AdditionalResourceWebConfiguration implements WebMvcConfigurer {
             {
                     "classpath:/META-INF/resources/",
                     "classpath:/resources/",
+                    "classpath:/resources/posts/",
                     "classpath:/static/",
                     "classpath:/public/",
                     "classpath:/static/vendor/",
