@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MdFileReader {
+    public static void main(String[] args) {
+        MdFileReader mdFileReader = new MdFileReader();
+
+    }
     public static List<String> readLinesFromMdFile(String filename) {
         try {
             InputStream inputStream = new ClassPathResource("/posts/static/articles/" + filename)
@@ -27,7 +31,7 @@ public class MdFileReader {
     public static List<String> readPosts() throws IOException {
         List<String> filenames = new ArrayList<>();
         try (
-                InputStream in = getResourceAsStream("/posts/");
+                InputStream in = getResourceAsStream("/posts/static/articles");
                 BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
             String resource;
             while ((resource = br.readLine()) != null) {
@@ -63,9 +67,6 @@ public class MdFileReader {
 
 
     public static Set<String> reader(String dir) throws IOException {
-
-
-
         return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)

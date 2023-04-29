@@ -28,7 +28,7 @@ public class ArticlesController {
         List<DataListArticles> articlesList = new ArrayList<>();
 
 
-        mdFileReader.reader("src/main/posts/static/articles").forEach(e -> {
+        mdFileReader.readPosts().forEach(e -> {
             List<String> header = mdFileReader.readLinesFromMdFile(e);
             Date date;
             try {
@@ -90,13 +90,11 @@ public class ArticlesController {
     public String getElementById(String id) throws IOException {
         MdFileReader mdFileReader = new MdFileReader();
         List<String> listElements = new ArrayList<>();
-        Set<String> mdFiles = mdFileReader.reader("src/main/posts/static/articles");
-        System.out.println(mdFiles);
-        InputStream inputStream = new ClassPathResource("/posts/static/articles/")
-                .getInputStream();
-        System.out.println(inputStream);
+        //Set<String> mdFiles = mdFileReader.reader("src/main/posts/static/articles");
+
+
         AtomicReference<String> result = new AtomicReference<>("");
-        mdFiles.forEach((e) -> {
+        mdFileReader.readPosts().forEach((e) -> {
             Pattern pattern = Pattern.compile("(\\d+_)");
             listElements.add(e.split(pattern.split(e)[1])[0].split("_")[0]);
             if (e.contains(id)) {
