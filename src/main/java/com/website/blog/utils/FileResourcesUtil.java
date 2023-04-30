@@ -1,6 +1,9 @@
 package com.website.blog.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 
 import java.io.*;
 import java.net.URI;
@@ -13,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileResourcesUtil {
+
     public static void main(String[] args) throws IOException {
 
         FileResourcesUtil app = new FileResourcesUtil();
@@ -26,6 +30,7 @@ public class FileResourcesUtil {
                 System.out.println("file : " + file);
                 printFile(file);
             }*/
+            //System.out.println(result);
 /*
             InputStream inputStream = new ClassPathResource("/posts/static/articles/")
                     .getInputStream();
@@ -35,12 +40,28 @@ public class FileResourcesUtil {
             //System.out.println(result);
 
             //System.out.println(app.readPosts());
+            //System.out.println(app.reader("src/main/posts/static/articles"));
+            //System.out.println(System.getProperty("user.dir"));
+            //app.reader("posts/md_files");
+            //List filenames = result.stream().filter(e -> !e.isDirectory()).map((File::getName)).collect(Collectors.toList());
+            //System.out.println(filenames);
+            //InputStream inputStream = new ClassPathResource("/posts/static/articles").getInputStream();
+            //System.out.println(inputStream.getClass());
+
+
+            //ResourceLoader resourceLoader = null;
+           // Resource files = resourceLoader.getResource("/posts");
+            //Resource filesIntellig = resourceLoader.getResource("classpath:/posts/static/articles");
 
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
 
     }
+
+
+
+
 
     public static Set<String> reader(String dir) throws IOException {
         return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
@@ -81,7 +102,6 @@ public class FileResourcesUtil {
                 .filter(Files::isRegularFile)
                 .map(x -> x.toFile())
                 .collect(Collectors.toList());
-
         return collect;
     }
 

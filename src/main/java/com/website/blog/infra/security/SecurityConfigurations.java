@@ -27,6 +27,7 @@ public class SecurityConfigurations {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/blog_war/login").permitAll()
                 //.requestMatchers(HttpMethod.GET,"/posts/**").permitAll()
                 //.requestMatchers(HttpMethod.DELETE, "/medicos").hasRole("ADMIN")
                 //.requestMatchers(HttpMethod.DELETE, "/pacientes").hasRole("ADMIN")

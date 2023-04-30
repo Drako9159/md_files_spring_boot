@@ -15,13 +15,13 @@ public class AdditionalResourceWebConfiguration implements WebMvcConfigurer {
             {
                     "classpath:/META-INF/resources/",
                     "classpath:/resources/",
-                    "classpath:/resources/posts/",
+                    "classpath:/posts/static/images",
                     "classpath:/static/",
                     "classpath:/public/",
                     "classpath:/static/vendor/",
                     "classpath:/static/custom/",
-                    "classpath:/templates",
-                    "file:/" + System.getProperty("user.dir") + "/src/main/posts/"
+                    "classpath:/templates/",
+                    //"file:/" + System.getProperty("user.dir") + "/src/main/posts/"
             };
 
     @Override

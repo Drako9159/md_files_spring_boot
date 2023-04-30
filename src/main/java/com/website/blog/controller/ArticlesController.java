@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -22,7 +23,7 @@ import java.util.regex.Pattern;
 public class ArticlesController {
 
     @GetMapping
-    public ResponseEntity<Page<DataListArticles>> listArticles(Pageable pageable) throws IOException {
+    public ResponseEntity<Page<DataListArticles>> listArticles(Pageable pageable) throws IOException, URISyntaxException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         MdFileReader mdFileReader = new MdFileReader();
         List<DataListArticles> articlesList = new ArrayList<>();
@@ -87,7 +88,7 @@ public class ArticlesController {
         }
     }
 
-    public String getElementById(String id) throws IOException {
+    public String getElementById(String id) throws IOException, URISyntaxException {
         MdFileReader mdFileReader = new MdFileReader();
         List<String> listElements = new ArrayList<>();
         //Set<String> mdFiles = mdFileReader.reader("src/main/posts/static/articles");

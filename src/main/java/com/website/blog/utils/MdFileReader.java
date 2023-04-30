@@ -1,8 +1,13 @@
 package com.website.blog.utils;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamSource;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,16 +15,15 @@ import java.util.stream.Stream;
 public class MdFileReader {
     public static void main(String[] args) {
         MdFileReader mdFileReader = new MdFileReader();
-
     }
+
     public static List<String> readLinesFromMdFile(String filename) {
         try {
+
             InputStream inputStream = new ClassPathResource("/posts/static/articles/" + filename)
                     .getInputStream();
             //InputStream inputStream = new FileInputStream("src/main/posts/static/articles/" + filename);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-
             return bufferedReader.lines()
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -28,11 +32,19 @@ public class MdFileReader {
         }
     }
 
-    public static List<String> readPosts() throws IOException {
+    public List<String> readPosts() throws IOException, URISyntaxException {
         List<String> filenames = new ArrayList<>();
+        System.out.println( System.getProperty("user.dir"));
         try (
                 InputStream in = getResourceAsStream("/posts/static/articles");
                 BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+
+            // test
+            List<File> result = getAllFilesFromResource("posts/static/articles");
+            List files = result.stream().filter(e -> !e.isDirectory()).map((File::getName)).collect(Collectors.toList());
+            System.out.println(files);
+
+
             String resource;
             while ((resource = br.readLine()) != null) {
                 filenames.add(resource);
@@ -40,6 +52,19 @@ public class MdFileReader {
             return filenames;
         }
     }
+
+    private List<File> getAllFilesFromResource(String folder)
+            throws URISyntaxException, IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(folder);
+        // dun walk the root path, we will walk all the classes
+        List<File> collect = Files.walk(Paths.get(resource.toURI()))
+                .filter(Files::isRegularFile)
+                .map(x -> x.toFile())
+                .collect(Collectors.toList());
+        return collect;
+    }
+
 
     private static InputStream getResourceAsStream(String resource) {
         final InputStream in
@@ -67,7 +92,8 @@ public class MdFileReader {
 
 
     public static Set<String> reader(String dir) throws IOException {
-        return Stream.of(Objects.requireNonNull(new File(dir).listFiles()))
+        String path = "posts/md_files";
+        return Stream.of(Objects.requireNonNull(new File(path).listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)
                 .collect(Collectors.toSet());
