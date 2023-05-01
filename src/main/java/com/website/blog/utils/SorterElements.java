@@ -1,13 +1,30 @@
 package com.website.blog.utils;
 
 import com.website.blog.models.DataListArticles;
+import org.springframework.data.domain.Pageable;
 
+import javax.xml.crypto.Data;
+import java.util.Arrays;
 import java.util.List;
 
 public class SorterElements {
 
-    public List<DataListArticles> sortBy(List<DataListArticles> articlesList, String sortBy, String order) {
+    public List<DataListArticles> sortBy(Pageable pageable, List<DataListArticles> articlesList) {
+        String[] strShortAvailable = {"id", "category", "tag", "filename", "language", "title", "date", "readTime", "author"};
+        List<String> mylist = Arrays.asList(strShortAvailable);
+        if (!pageable.getSort().toString().equals("UNSORTED")) {
+            if (mylist.contains(pageable.getSort().toString().split(":")[0])) {
+                applySort(
+                        articlesList,
+                        pageable.getSort().toString().split(":")[0],
+                        pageable.getSort().toString().split(":")[1]
+                );
+            }
+        }
+        return articlesList;
+    }
 
+    public List<DataListArticles> applySort(List<DataListArticles> articlesList, String sortBy, String order) {
         boolean sortConditionDESC = order.contains("DESC");
 
         switch (sortBy) {
@@ -70,5 +87,6 @@ public class SorterElements {
         }
 
         return articlesList;
+
     }
 }
