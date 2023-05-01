@@ -20,12 +20,27 @@ public class FileResourcesUtil {
     public static void main(String[] args) throws IOException {
 
         FileResourcesUtil app = new FileResourcesUtil();
+/*
+        File f = new File(System.getProperty("user.dir")+"/articles");
+        if(f.mkdir() == true){
+            System.out.println("Directory has been created successfully");
+        } else {
+            System.out.println("Directory cannot be created");
+        }*/
 
         // read all files from a resources folder
         try {
+/*
+            String path = "posts/md_files";
+            Set<String> tester = Stream.of(Objects.requireNonNull(new File(path).listFiles()))
+                    .filter(file -> !file.isDirectory())
+                    .map(File::getName)
+                    .collect(Collectors.toSet());
+            System.out.println(tester);*/
 
             // files from src/main/resources/json
-            List<File> result = app.getAllFilesFromResource("posts/static/articles");/*
+            List<File> result = app.getAllFilesFromResource("posts/md_files");
+            /*
             for (File file : result) {
                 System.out.println("file : " + file);
                 printFile(file);
@@ -49,12 +64,11 @@ public class FileResourcesUtil {
             //System.out.println(inputStream.getClass());
 
 
-            //ResourceLoader resourceLoader = null;
-           // Resource files = resourceLoader.getResource("/posts");
-            //Resource filesIntellig = resourceLoader.getResource("classpath:/posts/static/articles");
 
-        } catch (URISyntaxException | IOException e) {
+        } catch ( IOException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
 
     }

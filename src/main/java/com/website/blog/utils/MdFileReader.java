@@ -13,14 +13,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MdFileReader {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws URISyntaxException, IOException {
         MdFileReader mdFileReader = new MdFileReader();
+        mdFileReader.test();
     }
 
     public static List<String> readLinesFromMdFile(String filename) {
         try {
 
-            InputStream inputStream = new ClassPathResource("/posts/static/articles/" + filename)
+
+            InputStream inputStream = new ClassPathResource("/posts/md_files/" + filename)
                     .getInputStream();
             //InputStream inputStream = new FileInputStream("src/main/posts/static/articles/" + filename);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -34,15 +36,15 @@ public class MdFileReader {
 
     public List<String> readPosts() throws IOException, URISyntaxException {
         List<String> filenames = new ArrayList<>();
-        System.out.println( System.getProperty("user.dir"));
+        test();
         try (
-                InputStream in = getResourceAsStream("/posts/static/articles");
+                InputStream in = getResourceAsStream("/posts/md_files");
                 BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 
             // test
-            List<File> result = getAllFilesFromResource("posts/static/articles");
-            List files = result.stream().filter(e -> !e.isDirectory()).map((File::getName)).collect(Collectors.toList());
-            System.out.println(files);
+            //List<File> result = getAllFilesFromResource("posts/md_files");
+            //List files = result.stream().filter(e -> !e.isDirectory()).map((File::getName)).collect(Collectors.toList());
+
 
 
             String resource;
@@ -51,6 +53,25 @@ public class MdFileReader {
             }
             return filenames;
         }
+    }
+    public void test() throws URISyntaxException, IOException {
+        /*
+        String path = "posts/md_files";
+        Set<String> tester = Stream.of(Objects.requireNonNull(new File(path).listFiles()))
+                .filter(file -> !file.isDirectory())
+                .map(File::getName)
+                .collect(Collectors.toSet());
+        System.out.println(tester);*/
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource("posts/md_files");
+        // dun walk the root path, we will walk all the classes
+        List<File> collect = Files.walk(Paths.get(resource.toURI()))
+                .filter(Files::isRegularFile)
+                .map(x -> x.toFile())
+                .collect(Collectors.toList());
+        //System.out.println(collect);
+        System.out.println(collect.size());
     }
 
     private List<File> getAllFilesFromResource(String folder)
@@ -89,7 +110,6 @@ public class MdFileReader {
         return Long.parseLong(fileNameBeforeExtension.split("_")[0]);
 
     }
-
 
     public static Set<String> reader(String dir) throws IOException {
         String path = "posts/md_files";
